@@ -1,0 +1,26 @@
+{
+  "name": "ambastackdev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AmbaStackDev/Project_AmbaStackDev.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/AmbaStackDev/Project_AmbaStackDev/issues"
+  },
+  "homepage": "https://github.com/AmbaStackDev/Project_AmbaStackDev#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "nodemon": "^3.1.14"
+  }
+}
