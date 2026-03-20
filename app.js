@@ -1,19 +1,20 @@
-// Import express
-const express = require("express");
-
-// Membuat object express
+const express = require('express');
 const app = express();
+const port = 3000;
 
-// Middleware untuk membaca request body berformat JSON dan URL-encoded
+// Middleware untuk mem-parsing request body berformat JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routing dasar untuk mengecek server
-app.get("/", (req, res) => {
-  res.send("Selamat datang di API AmbaCart!");
+// Endpoint Utama (GET /)
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Selamat datang di API AmbaCart - AmbaStackDev!',
+  });
 });
 
-// Mendefinisikan port dan menjalankan server
-app.listen(3000, () => {
-    console.log("Server running at: http://localhost:3000");
+// Menjalankan server di port yang sudah ditentukan
+app.listen(port, () => {
+  console.log(`Server AmbaCart berjalan di http://localhost:${port}`);
 });
