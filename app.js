@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('./config/db'); // Memanggil koneksi DB
+const productRoutes = require('./routes/productRoutes'); 
 const app = express();
 const port = 3000;
 
@@ -21,3 +22,5 @@ app.get('/test-db', (req, res) => {
 app.listen(port, () => {
   console.log(`Server berjalan di http://localhost:${port}`);
 });
+
+app.use('/api/products', productRoutes); 
