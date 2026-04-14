@@ -19,8 +19,9 @@ app.get('/test-db', (req, res) => {
   });
 });
 
+app.use('/api/products', productRoutes); 
+
 app.listen(port, () => {
   console.log(`Server berjalan di http://localhost:${port}`);
 });
 
-app.use('/api/products', productRoutes); 
