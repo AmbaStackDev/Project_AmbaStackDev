@@ -21,7 +21,9 @@
   "homepage": "https://github.com/AmbaStackDev/Project_AmbaStackDev#readme",
   "dependencies": {
     "express": "^5.2.1",
-    "mysql2": "^3.20.0",
+    "mysql2": "^3.20.0"
+  },
+  "devDependencies": {
     "nodemon": "^3.1.14"
   }
 }
