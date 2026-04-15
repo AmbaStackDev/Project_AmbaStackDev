@@ -4,56 +4,40 @@ class ProductController {
     
     static index(req, res) {
         ProductModel.getAllProducts((err, results) => {
-            if (err) return res.status(500).json({ error: 'Failed to retrieve products' });
-            res.json({ message: 'Products retrieved successfully', data: results });
+            if (err) {
+                return res.status(500).json({ status: 500, message: 'Database Error', error: err.message });
+            }
+            res.status(200).json({ status: 200, data: results });
         });
     }
 
     static store(req, res) {
-        const { name, description, price, stock, category_id } = req.body;
+        const { name, price } = req.body;
 
-       
         if (!name || !price) {
-            return res.status(400).json({ success: false, message: 'Validasi gagal: Nama dan harga wajib diisi!' });
-        }
-        if (isNaN(price) || price <= 0) {
-            return res.status(400).json({ success: false, message: 'Validasi gagal: Harga harus berupa angka lebih dari 0!' });
+            return res.status(400).json({ status: 400, message: 'Nama dan harga wajib diisi!' });
         }
 
-        ProductModel.create({ name, description, price, stock: stock || 0, category_id: category_id || null }, (err, results) => {
-            if (err) return res.status(500).json({ success: false, message: 'Gagal menyimpan', error: err.message });
-            res.status(201).json({ success: true, message: 'Produk ditambahkan!', data: { id: results.insertId, name, price } });
+        ProductModel.create(req.body, (err, results) => {
+            if (err) {
+                return res.status(500).json({ status: 500, message: 'Gagal simpan data', error: err.message });
+            }
+            res.status(201).json({ status: 201, message: 'Produk berhasil dibuat' });
         });
     }
 
-   
     static update(req, res) {
         const id = req.params.id;
-        const { name, description, price, stock, category_id } = req.body;
-
-        
-        if (!name || !price) {
-            return res.status(400).json({ success: false, message: 'Validasi gagal: Nama dan harga wajib diisi!' });
-        }
-        if (isNaN(price) || price <= 0) {
-            return res.status(400).json({ success: false, message: 'Validasi gagal: Harga tidak valid!' });
-        }
-
-       
-        ProductModel.update(id, { name, description, price, stock: stock || 0, category_id: category_id || null }, (err, results) => {
+        ProductModel.update(id, req.body, (err, results) => {
             if (err) {
-                return res.status(500).json({ success: false, message: 'Gagal update produk', error: err.message });
+                return res.status(500).json({ status: 500, message: 'Database Error' });
             }
             
-           
             if (results.affectedRows === 0) {
-                return res.status(404).json({ success: false, message: 'Produk tidak ditemukan!' });
+                return res.status(404).json({ status: 404, message: 'Produk tidak ditemukan!' });
             }
             
-            res.json({ 
-                success: true, 
-                message: `Produk ID ${id} berhasil diupdate!` 
-            });
+            res.status(200).json({ status: 200, message: 'Update sukses' });
         });
     }
 }
