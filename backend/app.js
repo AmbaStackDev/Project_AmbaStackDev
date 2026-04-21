@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const db = require('./config/db'); // Memanggil koneksi DB
-const productRoutes = require('./routes/productRoutes'); 
+const productRoutes = require('./routes/productRoutes');
+const authRoutes = require('./routes/authRoutes');
 const app = express();
 const port = 3000;
 
@@ -20,8 +22,8 @@ app.get('/test-db', (req, res) => {
 });
 
 app.use('/api/products', productRoutes); 
+app.use('/api/auth', authRoutes);
 
 app.listen(port, () => {
   console.log(`Server berjalan di http://localhost:${port}`);
 });
-
