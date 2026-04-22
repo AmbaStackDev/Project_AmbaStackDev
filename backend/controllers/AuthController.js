@@ -28,7 +28,6 @@ class AuthController {
         });
     }
 
-    // ↓ TAMBAHAN BARU
     static login(req, res) {
         const { email, password } = req.body;
         if (!email || !password)
