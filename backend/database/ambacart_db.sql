@@ -12,14 +12,14 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3. Membuat Tabel categories (Tabel Baru)
+-- 3. Membuat Tabel categories
 CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT
 );
 
--- 4. Membuat Tabel products (Update: Tambah category_id)
+-- 4. Membuat Tabel products
 CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     category_id INT,
@@ -27,7 +27,7 @@ CREATE TABLE products (
     description TEXT,
     price DECIMAL(10, 2) NOT NULL,
     stock INT NOT NULL DEFAULT 0,
-    image_url VARCHAR(255),
+    image VARCHAR(255), -- UPDATE SPRINT 7: Diubah dari image_url menjadi image
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
 );
 
