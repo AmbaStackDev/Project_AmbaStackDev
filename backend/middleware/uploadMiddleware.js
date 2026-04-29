@@ -1,10 +1,17 @@
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
+
+// Cek apakah folder 'uploads' ada, jika tidak, buat foldernya
+const uploadDir = 'uploads/';
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 // 1. Konfigurasi Storage & Rename File Otomatis
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/'); // File akan disimpan di folder backend/uploads/
+        cb(null, 'uploadsDir'); // File akan disimpan di folder backend/uploads/
     },
     filename: function (req, file, cb) {
         // Format: timestamp-randomangka.ekstensi (contoh: 1690123-456.jpg)
