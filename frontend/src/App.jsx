@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getProducts } from './utils/productApi';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Product from './components/Product';
@@ -7,15 +8,26 @@ import './App.css';
 
 function App() {
   const [cartCount, setCartCount] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [products, setProducts] = useState([
-    { id: 1, name: "Smart TV 4K Ultra HD 43 Inch Premium", price: 3499000, location: "Jakarta Barat", sold: 80, image: "/products/tv.jpg" },
-    { id: 2, name: "Ergonomic Office Chair / Kursi Kerja Hidrolik", price: 850000, location: "Tangerang", sold: 150, image: "/products/kursi.webp" },
-    { id: 3, name: "Mechanical Keyboard RGB Wireless Hotswap", price: 620000, location: "Jakarta Pusat", sold: 340, image: "/products/keyboard.webp" },
-    { id: 4, name: "Running Shoes Light Weight Breatheable", price: 450000, location: "Bandung", sold: 95, image: "/products/sepatu.webp" },
-    { id: 5, name: "Tas Ransel Laptop Anti Air dengan USB Port", price: 210000, location: "Depok", sold: 520, image: "/products/tas.png" },
-    { id: 6, name: "Air Fryer Low Watt 2.5L Penggoreng Tanpa Minyak", price: 540000, location: "Surabaya", sold: 60, image: "/products/airfry.jpg" }
-  ]);
+  useEffect(() => {
+    async function loadData() {
+      try {
+        setLoading(true);
+        const response = await getProducts();
+        if (response && response.data) {
+          setProducts(response.data.data);
+        }
+      } catch (err) {
+        setError(err.message || 'Gagal menarik data dari server');
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
 
   const categories = ["Semua Kategori", "Elektronik", "Fashion & Aksesoris", "Peralatan Rumah", "Olahraga & Hobi"];
 
@@ -43,7 +55,6 @@ function App() {
       <main className="container-fluid flex-grow-1 px-3 px-md-5 mt-2">
         <Hero />
 
-        {/* SECTION KATEGORI */}
         <div className="mb-5 d-flex flex-wrap gap-2 align-items-center">
           <span className="fw-bold me-2 text-dark fs-5">Kategori:</span>
           {categories.map((cat, index) => (
@@ -53,7 +64,6 @@ function App() {
           ))}
         </div>
 
-        {/* KATALOG HEADER & TOMBOL TEST */}
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h4 className="fw-bolder text-dark fs-3 mb-0" style={{ letterSpacing: '-0.5px' }}>
             Katalog Produk Pilihan
@@ -63,16 +73,15 @@ function App() {
           </button>
         </div>
         
-        {/* GRID RESPONSIF */}
         <div className="row g-4 mb-5">
           {products.map((product) => (
             <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2" key={product.id}>
               <Product 
                 name={product.name} 
                 price={product.price} 
-                location={product.location}
-                sold={product.sold}
-                image={product.image}
+                location={product.location || "Gudang Pusat"}
+                sold={product.sold || 0}
+                image={product.image_url || product.image || `https://picsum.photos/300/300?random=${product.id}`}
                 onAddToCart={handleAddToCart} 
               />
             </div>
