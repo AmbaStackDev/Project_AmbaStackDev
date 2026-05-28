@@ -160,3 +160,45 @@ main.container-fluid {
       z-index: 1; /* Reset z-index desktop stacking */
   }
 }
+
+/* =========================================
+   UI/UX SPRINT 10 UPGRADES
+   ========================================= */
+
+/* 1. Efek 3D Anti-Gravitasi untuk Kartu Produk */
+.product-card-hover {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+.product-card-hover:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+  border-color: rgba(3, 172, 14, 0.3);
+}
+
+/* 2. Glassmorphism untuk Navbar (Kaca Buram) */
+.glass-navbar {
+  background: rgba(255, 255, 255, 0.7) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+}
+
+/* 3. Animasi Pop untuk Icon Keranjang */
+@keyframes cartPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.5); color: #03AC0E; }
+  100% { transform: scale(1); }
+}
+.animate-pop {
+  animation: cartPop 0.4s ease-out;
+}
+
+/* 4. Empty State Illustration container */
+.empty-state-glass {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  border: 2px dashed #cbd5e1;
+  border-radius: 20px;
+}

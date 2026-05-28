@@ -1,0 +1,17 @@
+.ambassador-popout {
+  max-height: 280px;
+  object-fit: contain;
+  margin-top: -30px;
+  transform-origin: bottom center;
+}
+
+@media (min-width: 768px) {
+  .ambassador-popout {
+    max-height: 480px !important;
+    margin-top: -100px;
+    margin-bottom: -5px;
+    transform: scale(1.05);
+    transform-origin: bottom center;
+    z-index: 1;
+  }
+}

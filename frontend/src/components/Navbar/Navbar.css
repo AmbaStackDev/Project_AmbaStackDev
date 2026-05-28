@@ -1,0 +1,17 @@
+.glass-navbar {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+  }
+  
+  @keyframes cartPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.5); color: #03AC0E; }
+    100% { transform: scale(1); }
+  }
+  
+  .animate-pop {
+    animation: cartPop 0.4s ease-out;
+  }
