@@ -3,11 +3,13 @@ const router = express.Router();
 const ProductController = require('../controllers/ProductController');
 
 const { verifyToken, isAdmin } = require('../middleware/authMiddleware');
-// Panggil konfigurasi Multer
 const upload = require('../middleware/uploadMiddleware'); 
 
-router.get('/', ProductController.index);
-// Sisipkan upload.single('image') sebelum ProductController
+router.get('/', (req, res, next) => {
+    console.log('>>> HIT GET /products');
+    next();
+}, ProductController.index);
+
 router.post('/', verifyToken, isAdmin, upload.single('image'), ProductController.store);
 router.put('/:id', verifyToken, isAdmin, upload.single('image'), ProductController.update);
 

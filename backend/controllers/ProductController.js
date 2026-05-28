@@ -8,7 +8,16 @@ class ProductController {
             if (err) {
                 return res.status(500).json({ status: 500, message: 'Database Error', error: err.message });
             }
-            res.status(200).json({ status: 200, data: results });
+            // Mapping kolom DB → skema JSON Sprint 10
+            const mapped = results.map(p => ({
+                id        : p.id,
+                name      : p.name,
+                price     : p.price,
+                location  : p.location  || 'Gudang Pusat',
+                sold      : p.sold      || 0,
+                image_url : p.image_url || (p.image ? `/uploads/${p.image}` : null),
+            }));
+            res.status(200).json({ success: true, data: mapped });
         });
     }
 
@@ -46,7 +55,7 @@ class ProductController {
             description : description || null,
             price,
             stock       : stock || 0,
-            image,                        // <-- dari req.file.filename
+            image,
             category_id : category_id || null,
         };
 
@@ -92,7 +101,7 @@ class ProductController {
                 description : description || null,
                 price,
                 stock       : stock || 0,
-                image,                        // <-- baru atau lama
+                image,
                 category_id : category_id || null,
             };
 

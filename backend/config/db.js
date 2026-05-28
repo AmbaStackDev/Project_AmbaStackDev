@@ -1,18 +1,21 @@
 const mysql = require('mysql2');
+require('dotenv').config();
 
-const db = mysql.createConnection({
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'root',
-    database: 'ambacart_db'
+const db = mysql.createPool({
+    host     : process.env.DB_HOST,
+    user     : process.env.DB_USER,
+    password : process.env.DB_PASSWORD,
+    database : process.env.DB_NAME,
+    waitForConnections: true,
+    connectionLimit: 10,
 });
 
-db.connect((err) => {
+db.query('SELECT 1', (err) => {
     if (err) {
         console.error('Gagal terkoneksi ke database:', err.message);
-        return;
+    } else {
+        console.log('Berhasil terkoneksi ke database MySQL: ambacart_db');
     }
-    console.log('Berhasil terkoneksi ke database MySQL: ambacart_db');
 });
 
 module.exports = db;
