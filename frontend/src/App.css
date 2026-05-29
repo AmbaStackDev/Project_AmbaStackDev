@@ -6,8 +6,13 @@ body {
   color: #1e293b;
 }
 
-.text-brand { color: #03AC0E !important; }
-.bg-brand { background-color: #03AC0E !important; }
+.text-brand {
+  color: #03AC0E !important;
+}
+
+.bg-brand {
+  background-color: #03AC0E !important;
+}
 
 /* =========================================
    1. GLASSMORPHISM (Efek Kaca)
@@ -26,7 +31,8 @@ body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 12px; /* Sudut khas Flat Design (tidak terlalu bulat) */
+  border-radius: 12px;
+  /* Sudut khas Flat Design (tidak terlalu bulat) */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
   transition: transform 0.2s ease, background 0.2s ease;
 }
@@ -43,9 +49,11 @@ body {
 /* TOMBOL UTAMA FLAT DESIGN (Hijau Solid, Teks Putih Terkunci) */
 .flat-btn-brand {
   background-color: #03AC0E !important;
-  color: #ffffff !important; /* Memaksa teks berwarna putih bersih */
+  color: #ffffff !important;
+  /* Memaksa teks berwarna putih bersih */
   border: none !important;
-  border-radius: 8px !important; /* Potongan kotak khas flat design */
+  border-radius: 8px !important;
+  /* Potongan kotak khas flat design */
   font-weight: 600 !important;
   box-shadow: none !important;
   transition: background-color 0.2s ease, transform 0.2s ease;
@@ -60,6 +68,7 @@ body {
 .flat-btn-brand:active {
   transform: translateY(0);
 }
+
 .flat-input {
   background-color: rgba(255, 255, 255, 0.7) !important;
   border: 2px solid transparent !important;
@@ -68,6 +77,7 @@ body {
   color: #1e293b !important;
   transition: all 0.2s ease;
 }
+
 .flat-input:focus {
   background-color: #ffffff !important;
   border-color: #03AC0E !important;
@@ -85,6 +95,7 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
 }
+
 .flat-category-item:hover {
   background: #03AC0E;
   color: white;
@@ -103,20 +114,23 @@ body {
 /* Ketika Search Bar disorot/fokus */
 .flat-search-group:focus-within {
   background-color: #ffffff;
-  border-color: #03AC0E; /* Berubah jadi hijau brand saat mengetik */
+  border-color: #03AC0E;
+  /* Berubah jadi hijau brand saat mengetik */
 }
 
 /* Tombol Ikon Di Dalam Search Bar */
 .flat-search-btn {
   background-color: transparent !important;
-  color: #64748b !important; /* Warna abu-abu solid profesional */
+  color: #64748b !important;
+  /* Warna abu-abu solid profesional */
   border: none !important;
   box-shadow: none !important;
   transition: color 0.2s ease;
 }
 
 .flat-search-btn:hover {
-  color: #03AC0E !important; /* Ikon berubah jadi hijau saat di-hover */
+  color: #03AC0E !important;
+  /* Ikon berubah jadi hijau saat di-hover */
 }
 
 /* =========================================
@@ -125,13 +139,14 @@ body {
 
 /* A. Memberi jarak margin universal di atap agar pop-out tidak nabrak Navbar sticky */
 main.container-fluid {
-  margin-top: 100px !important; /* Ganti margin universal dari previous prompt */
+  margin-top: 100px !important;
+  /* Ganti margin universal dari previous prompt */
 }
 
 /* Mobile adjustment: Memberi ruang di mobile agar kepala pop-out aman */
 @media (max-width: 767px) {
   main.container-fluid {
-      margin-top: 80px !important; 
+    margin-top: 80px !important;
   }
 }
 
@@ -144,20 +159,28 @@ main.container-fluid {
   object-fit: contain;
 
   /* Styling bawaan untuk HP (KUNCI NONGOL MOBILE) */
-  max-height: 280px; /* Tinggi di HP sedikit diperkecil agar pas */
-  margin-top: -60px; /* Nongol keluar menembus atap card di HP */
-  z-index: 10; /* Make sure image is on top */
+  max-height: 280px;
+  /* Tinggi di HP sedikit diperkecil agar pas */
+  margin-top: -60px;
+  /* Nongol keluar menembus atap card di HP */
+  z-index: 10;
+  /* Make sure image is on top */
 }
 
 /* C. KUNCI EFEK 3D NONGOL PADA DESKTOP */
 @media (min-width: 768px) {
   .ambassador-popout {
-      max-height: 480px !important; /* Tinggi desktop */
-      margin-top: -100px; /* Nongol keluar menembus atap card di desktop */
-      margin-bottom: -5px; /* Menempel di lantai bawah card */
-      transform: scale(1.05); /* Sedikit diperbesar */
-      transform-origin: bottom center;
-      z-index: 1; /* Reset z-index desktop stacking */
+    max-height: 480px !important;
+    /* Tinggi desktop */
+    margin-top: -100px;
+    /* Nongol keluar menembus atap card di desktop */
+    margin-bottom: -5px;
+    /* Menempel di lantai bawah card */
+    transform: scale(1.05);
+    /* Sedikit diperbesar */
+    transform-origin: bottom center;
+    z-index: 1;
+    /* Reset z-index desktop stacking */
   }
 }
 
@@ -170,6 +193,7 @@ main.container-fluid {
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   border: 1px solid rgba(255, 255, 255, 0.5);
 }
+
 .product-card-hover:hover {
   transform: translateY(-8px) scale(1.01);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
@@ -187,10 +211,20 @@ main.container-fluid {
 
 /* 3. Animasi Pop untuk Icon Keranjang */
 @keyframes cartPop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.5); color: #03AC0E; }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.5);
+    color: #03AC0E;
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
+
 .animate-pop {
   animation: cartPop 0.4s ease-out;
 }
@@ -217,6 +251,108 @@ main.container-fluid {
 
 /* Efek sentuhan untuk tombol icon mata */
 .btn-eye:hover {
-  background-color: rgba(0,0,0,0.05) !important;
+  background-color: rgba(0, 0, 0, 0.05) !important;
   border-radius: 8px;
+}
+
+/* ... (kode CSS yang sudah ada sebelumnya biarkan saja) ... */
+
+/* ==========================================
+   TOAST NOTIFICATION STYLES (GLOBAL)
+   ========================================== */
+.toast-notification {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+
+  /* Mulai dari bawah layar dan transparan */
+  transform: translateX(-50%) translateY(100px);
+  opacity: 0;
+
+  /* Efek Kaca (Glassmorphism) */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  padding: 12px 24px;
+  border-radius: 50px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(3, 172, 14, 0.3);
+  z-index: 9999;
+
+  /* Kurva bezier untuk efek animasi membal (bouncy) */
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  pointer-events: none;
+  /* Agar tidak mengganggu klik elemen di bawahnya */
+}
+
+/* Class tambahan saat dimunculkan */
+.toast-notification.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* Responsif di Layar HP (Agar ukurannya tidak memakan layar) */
+@media (max-width: 575.98px) {
+  .toast-notification {
+    width: 90%;
+    max-width: 350px;
+    padding: 10px 20px;
+    bottom: 20px;
+  }
+}
+
+/* ... (biarkan kode CSS yang sudah ada sebelumnya) ... */
+
+/* ==========================================
+   SCROLL TO TOP BUTTON (GLOBAL)
+   ========================================== */
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: -60px;
+  /* Secara default ngumpet di bawah layar */
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background-color: #03AC0E;
+  /* Warna Brand Hijau AmbaCart */
+  color: white;
+  border: none;
+  z-index: 1040;
+
+  /* Efek animasi membal saat muncul/hilang */
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  opacity: 0;
+  pointer-events: none;
+  /* Tidak bisa diklik saat tersembunyi */
+}
+
+.scroll-to-top-btn:hover {
+  background-color: #028A0B;
+  color: white;
+  transform: translateY(-5px);
+  /* Sedikit naik saat kursor diarahkan (hover) */
+  box-shadow: 0 15px 25px rgba(3, 172, 14, 0.3) !important;
+}
+
+.scroll-to-top-btn.show {
+  bottom: 30px;
+  /* Muncul nongol ke atas */
+  opacity: 1;
+  pointer-events: auto;
+  /* Bisa diklik kembali */
+}
+
+/* Responsif untuk Layar HP (Mobile View) */
+@media (max-width: 575.98px) {
+  .scroll-to-top-btn {
+    right: 20px;
+    width: 45px;
+    height: 45px;
+  }
+
+  .scroll-to-top-btn.show {
+    /* Diletakkan lebih tinggi di HP agar TIDAK BERTABRAKAN dengan Toast Notification */
+    bottom: 85px;
+  }
 }
