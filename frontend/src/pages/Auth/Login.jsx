@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import http from '../../utils/http'; // ✅ tambah import
 
 import ambaNormal from '../../assets/mascot1.png'; 
 import ambaClosed from '../../assets/mascot2.png'; 
@@ -7,6 +8,39 @@ import ambaClosed from '../../assets/mascot2.png';
 function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // ✅ TAMBAH STATE FORM
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  // ✅ TAMBAH HANDLER CHANGE
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // ✅ TAMBAH HANDLER SUBMIT
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const res = await http.post('/auth/login', formData);
+      const { token } = res.data;
+
+      // Simpan token ke localStorage
+      localStorage.setItem('token', token);
+
+      alert('Login berhasil!');
+      navigate('/admin/add-product');
+    } catch (error) {
+      console.error(error);
+      alert('Email atau password salah.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="glass-panel p-4 p-sm-5 shadow-lg position-relative mt-5" style={{ width: '100%', maxWidth: '450px', borderRadius: '20px' }}>
@@ -16,15 +50,7 @@ function Login() {
         type="button" 
         onClick={() => navigate(-1)} 
         className="btn btn-light text-secondary rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute hover-scale" 
-        style={{ 
-          top: '24px', 
-          left: '24px', 
-          width: '38px', 
-          height: '38px', 
-          zIndex: 10, 
-          transition: 'transform 0.2s',
-          border: '1px solid rgba(0,0,0,0.05)'
-        }}
+        style={{ top: '24px', left: '24px', width: '38px', height: '38px', zIndex: 10, transition: 'transform 0.2s', border: '1px solid rgba(0,0,0,0.05)' }}
         title="Kembali"
       >
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
@@ -33,49 +59,16 @@ function Login() {
       </button>
 
       {/* MASKOT */}
-      <div 
-        className="text-center" 
-        style={{ 
-          marginTop: '-130px', 
-          marginBottom: '-25px', 
-          display: 'grid', 
-          placeItems: 'center', 
-          height: '185px' 
-        }}
-      >
-        <img 
-          src={ambaNormal} 
-          alt="AmbaCart Ambassador" 
-          style={{ 
-            gridArea: '1 / 1 / 2 / 2',
-            height: '185px', 
-            objectFit: 'contain', 
-            transition: 'opacity 0.15s ease-in-out',
-            filter: 'drop-shadow(0 10px 10px rgba(0,0,0,0.15))',
-            opacity: showPassword ? 0 : 1,
-            zIndex: showPassword ? 1 : 2
-          }} 
-        />
-        <img 
-          src={ambaClosed} 
-          alt="AmbaCart Ambassador Eyes Closed" 
-          style={{ 
-            gridArea: '1 / 1 / 2 / 2',
-            height: '185px', 
-            objectFit: 'contain', 
-            transition: 'opacity 0.15s ease-in-out',
-            filter: 'drop-shadow(0 10px 10px rgba(0,0,0,0.15))',
-            opacity: showPassword ? 1 : 0,
-            zIndex: showPassword ? 2 : 1
-          }} 
-        />
+      <div className="text-center" style={{ marginTop: '-130px', marginBottom: '-25px', display: 'grid', placeItems: 'center', height: '185px' }}>
+        <img src={ambaNormal} alt="AmbaCart Ambassador" style={{ gridArea: '1 / 1 / 2 / 2', height: '185px', objectFit: 'contain', transition: 'opacity 0.15s ease-in-out', filter: 'drop-shadow(0 10px 10px rgba(0,0,0,0.15))', opacity: showPassword ? 0 : 1, zIndex: showPassword ? 1 : 2 }} />
+        <img src={ambaClosed} alt="AmbaCart Ambassador Eyes Closed" style={{ gridArea: '1 / 1 / 2 / 2', height: '185px', objectFit: 'contain', transition: 'opacity 0.15s ease-in-out', filter: 'drop-shadow(0 10px 10px rgba(0,0,0,0.15))', opacity: showPassword ? 1 : 0, zIndex: showPassword ? 2 : 1 }} />
       </div>
 
       <h4 className="fw-bold text-center text-dark mb-1 mt-2">Selamat Datang Kembali</h4>
       <p className="text-center text-secondary mb-4 small">Silakan masuk ke akun AmbaCart Anda</p>
       
-      <form>
-        {/* INPUT EMAIL DENGAN ICON */}
+      {/* ✅ TAMBAH onSubmit */}
+      <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label fw-medium text-dark small">Email</label>
           <div className="input-group custom-input-group shadow-sm bg-white rounded-3 overflow-hidden">
@@ -84,11 +77,11 @@ function Login() {
                 <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
               </svg>
             </span>
-            <input type="email" className="form-control px-2 py-2 border-0 shadow-none bg-transparent" placeholder="contoh@email.com" required />
+            {/* ✅ TAMBAH name & onChange */}
+            <input type="email" name="email" className="form-control px-2 py-2 border-0 shadow-none bg-transparent" placeholder="contoh@email.com" onChange={handleChange} required />
           </div>
         </div>
 
-        {/* INPUT PASSWORD DENGAN ICON KIRI & KANAN */}
         <div className="mb-4">
           <label className="form-label fw-medium text-dark small">Password</label>
           <div className="input-group custom-input-group shadow-sm bg-white rounded-3 overflow-hidden">
@@ -97,18 +90,9 @@ function Login() {
                 <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2"/>
               </svg>
             </span>
-            <input 
-              type={showPassword ? "text" : "password"} 
-              className="form-control px-2 py-2 border-0 shadow-none bg-transparent" 
-              placeholder="Masukkan password" 
-              required 
-            />
-            <button 
-              type="button" 
-              className="btn btn-eye border-0 text-secondary bg-transparent px-3 d-flex align-items-center" 
-              onClick={() => setShowPassword(!showPassword)}
-              style={{ zIndex: 5 }}
-            >
+            {/* ✅ TAMBAH name & onChange */}
+            <input type={showPassword ? "text" : "password"} name="password" className="form-control px-2 py-2 border-0 shadow-none bg-transparent" placeholder="Masukkan password" onChange={handleChange} required />
+            <button type="button" className="btn btn-eye border-0 text-secondary bg-transparent px-3 d-flex align-items-center" onClick={() => setShowPassword(!showPassword)} style={{ zIndex: 5 }}>
               {showPassword ? (
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
                   <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474L3.086 5.212C1.612 6.397.737 7.712.735 7.715a.5.5 0 0 0 0 .57c.163.26 1.385 2.15 3.426 3.728 2.04 1.579 4.417 2.42 6.629 2.42a11.4 11.4 0 0 0 1.004-.05C10.79 12.912 10.79 12.912 10.79 12.912M9.986 9.57l-1.12-1.119c.1-.137.145-.296.145-.451a1.5 1.5 0 0 0-1.5-1.5c-.156 0-.315.045-.451.145L5.943 5.529a3.5 3.5 0 0 1 4.043 4.043m.254 1.4-1.51-1.512A1.5 1.5 0 0 0 7.93 7.93l-1.512-1.51A1.5 1.5 0 0 0 5.07 9.34l1.51 1.512A1.5 1.5 0 0 0 9.34 9.34l1.512 1.51a1.5 1.5 0 0 0 1.132-.213"/>
@@ -124,8 +108,8 @@ function Login() {
           </div>
         </div>
 
-        <button type="submit" className="btn flat-btn-brand w-100 py-2.5 fw-bold mb-3 rounded-3">
-          Masuk Sekarang
+        <button type="submit" className="btn flat-btn-brand w-100 py-2.5 fw-bold mb-3 rounded-3" disabled={loading}>
+          {loading ? 'Memuat...' : 'Masuk Sekarang'}
         </button>
       </form>
       
