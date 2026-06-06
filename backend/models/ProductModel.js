@@ -16,31 +16,39 @@ class ProductModel {
         });
     }
 
-    // CREATE - tambahkan kolom image
+    // CREATE - Sinkronisasi dengan form Frontend (name, price, location, image)
     static create(data, callback) {
         const query = `
-            INSERT INTO products (name, description, price, stock, image, category_id) 
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO products (name, price, location, image, description, stock, category_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         `;
         db.query(
             query,
-            [data.name, data.description, data.price, data.stock, data.image, data.category_id],
+            [
+                data.name, 
+                data.price, 
+                data.location, 
+                data.image,
+                data.description || null, // Biarkan null jika dari frontend tidak ada
+                data.stock || 0,          // Beri nilai 0 agar tidak melanggar NOT NULL MySQL
+                data.category_id || null  // Biarkan null
+            ],
             (err, results) => {
                 callback(err, results);
             }
         );
     }
 
-    // UPDATE - tambahkan kolom image
+    // UPDATE - Hanya perbarui kolom yang dikelola di Sprint 12
     static update(id, data, callback) {
         const query = `
             UPDATE products 
-            SET name=?, description=?, price=?, stock=?, image=?, category_id=? 
+            SET name=?, price=?, location=?, image=? 
             WHERE id=?
         `;
         db.query(
             query,
-            [data.name, data.description, data.price, data.stock, data.image, data.category_id, id],
+            [data.name, data.price, data.location, data.image, id],
             (err, results) => {
                 callback(err, results);
             }

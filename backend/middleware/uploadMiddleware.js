@@ -36,10 +36,20 @@ const fileFilter = (req, file, cb) => {
 };
 
 // 3. Inisialisasi Multer dengan batasan ukuran 2MB
-const upload = multer({
+const upload = multer({ 
     storage: storage,
-    limits: { fileSize: 2 * 1024 * 1024 }, // Maksimal 2 MB
-    fileFilter: fileFilter
+    limits: { 
+        // Mengubah batas maksimal menjadi 5 MB (5 * 1024 * 1024 bytes)
+        fileSize: 5 * 1024 * 1024 
+    },
+    fileFilter: function (req, file, cb) {
+        // Validasi ekstensi file (hanya gambar)
+        const ext = path.extname(file.originalname).toLowerCase();
+        if (ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg' && ext !== '.webp') {
+            return cb(new Error('Hanya diperbolehkan mengunggah file gambar (PNG, JPG, JPEG, WEBP)'));
+        }
+        cb(null, true);
+    }
 });
 
 module.exports = upload;

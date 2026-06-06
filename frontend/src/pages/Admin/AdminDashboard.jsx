@@ -1,16 +1,16 @@
-JavaScript
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getProducts } from '../../utils/productApi';
+import { getProducts, deleteProduct } from '../../utils/productApi';
 
-function AdminDashboard() {
+// Terima props showToast dari App.jsx
+function AdminDashboard({ showToast }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchProducts = async () => {
     try {
       const response = await getProducts();
-      setProducts(response.data.data); // Sesuaikan dengan struktur JSON Backendmu
+      setProducts(response.data.data); 
     } catch (error) {
       console.error("Gagal memuat data produk:", error);
     } finally {
@@ -22,6 +22,21 @@ function AdminDashboard() {
     fetchProducts();
   }, []);
 
+  // FUNGSI HAPUS (ISSUE 5)
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Apakah Anda yakin ingin menghapus produk ini?");
+    if (confirmDelete) {
+      try {
+        await deleteProduct(id);
+        showToast("Produk berhasil dihapus dari database!"); // Panggil Toast
+        fetchProducts(); // Refresh tabel otomatis
+      } catch (error) {
+        console.error("Error menghapus produk:", error);
+        alert("Gagal menghapus produk.");
+      }
+    }
+  };
+
   return (
     <div className="container mt-5 min-vh-100">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -30,7 +45,7 @@ function AdminDashboard() {
       </div>
 
       {loading ? (
-        <p>Memuat data produk...</p>
+        <div className="text-center mt-5"><div className="spinner-border text-success"></div></div>
       ) : (
         <div className="table-responsive bg-white rounded-3 shadow-sm p-3">
           <table className="table table-hover align-middle">
@@ -52,8 +67,8 @@ function AdminDashboard() {
                   <td>{product.location}</td>
                   <td>
                     <Link to={`/admin/edit/${product.id}`} className="btn btn-sm btn-warning me-2">Edit</Link>
-                    {/* Tombol Hapus akan diselesaikan oleh Raka */}
-                    <button className="btn btn-sm btn-danger">Hapus</button>
+                    {/* TOMBOL HAPUS BERFUNGSI */}
+                    <button onClick={() => handleDelete(product.id)} className="btn btn-sm btn-danger">Hapus</button>
                   </td>
                 </tr>
               ))}

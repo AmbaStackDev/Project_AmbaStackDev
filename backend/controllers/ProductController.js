@@ -37,7 +37,8 @@ class ProductController {
 
     // POST /products
     static store(req, res) {
-        const { name, description, price, stock, category_id } = req.body;
+        // PERBAIKAN: Menangkap name, price, dan location
+        const { name, price, location } = req.body;
 
         // Tangkap filename dari Multer, null jika tidak ada file
         const image = req.file ? req.file.filename : null;
@@ -50,13 +51,12 @@ class ProductController {
             return res.status(400).json({ status: 400, message: 'Harga harus berupa angka positif!' });
         }
 
+        // PERBAIKAN: Menyimpan data yang sesuai
         const data = {
             name,
-            description : description || null,
             price,
-            stock       : stock || 0,
+            location: location || 'Gudang Pusat',
             image,
-            category_id : category_id || null,
         };
 
         ProductModel.create(data, (err, results) => {
@@ -74,7 +74,9 @@ class ProductController {
     // PUT /products/:id
     static update(req, res) {
         const id = req.params.id;
-        const { name, description, price, stock, category_id } = req.body;
+        
+        // PERBAIKAN: Menangkap name, price, dan location
+        const { name, price, location } = req.body;
 
         // Validasi input wajib
         if (!name || !price) {
@@ -96,13 +98,12 @@ class ProductController {
             // Jika ada file baru → pakai filename baru, jika tidak → pertahankan image lama
             const image = req.file ? req.file.filename : product.image;
 
+            // PERBAIKAN: Menyimpan data pembaruan yang sesuai
             const data = {
                 name,
-                description : description || null,
                 price,
-                stock       : stock || 0,
+                location: location || product.location || 'Gudang Pusat',
                 image,
-                category_id : category_id || null,
             };
 
             ProductModel.update(id, data, (err, results) => {

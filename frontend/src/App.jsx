@@ -10,7 +10,11 @@ import Home from './pages/Home';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import NotFound from './pages/NotFound'; 
+
+// Import Admin Pages
+import AdminDashboard from './pages/Admin/AdminDashboard';
 import AddProduct from './pages/Admin/AddProduct';
+import EditProduct from './pages/Admin/EditProduct'; // Pastikan nama filenya EditProduct.jsx (jangan typo ada dua titik)
 
 import './App.css';
 
@@ -18,12 +22,17 @@ function App() {
   const [cartCount, setCartCount] = useState(0);
   const [toast, setToast] = useState({ show: false, message: '' });
 
-  const handleAddToCart = () => {
-    setCartCount((prev) => prev + 1);
-    setToast({ show: true, message: 'Berhasil ditambahkan ke keranjang!' });
+  // Fungsi khusus untuk menampilkan Toast yang bisa dioper ke halaman lain
+  const showToastMessage = (msg) => {
+    setToast({ show: true, message: msg });
     setTimeout(() => {
       setToast({ show: false, message: '' });
     }, 3000); 
+  };
+
+  const handleAddToCart = () => {
+    setCartCount((prev) => prev + 1);
+    showToastMessage('Berhasil ditambahkan ke keranjang!');
   };
 
   return (
@@ -38,12 +47,19 @@ function App() {
           <Route path="/register" element={<Register />} />
         </Route>
 
-        <Route path="/admin/add-product" element={<AddProduct />} />
+        {/* ==========================================
+            RUTE KHUSUS ADMIN (ISSUE 5)
+            Dioper fungsi showToastMessage agar UX mulus
+            ========================================== */}
+        <Route path="/admin" element={<AdminDashboard showToast={showToastMessage} />} />
+        <Route path="/admin/add" element={<AddProduct showToast={showToastMessage} />} />
+        <Route path="/admin/edit/:id" element={<EditProduct showToast={showToastMessage} />} />
 
+        {/* Rute 404 Error Handling */}
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-      {/* Toast Notification */}
+      {/* Toast Notification Element */}
       <div className={`toast-notification ${toast.show ? 'show' : ''}`}>
         <div className="d-flex align-items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="text-success flex-shrink-0" viewBox="0 0 16 16">
