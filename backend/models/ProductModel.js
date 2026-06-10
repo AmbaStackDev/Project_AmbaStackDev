@@ -39,16 +39,16 @@ class ProductModel {
         );
     }
 
-    // UPDATE - Hanya perbarui kolom yang dikelola di Sprint 12
     static update(id, data, callback) {
         const query = `
             UPDATE products 
-            SET name=?, price=?, location=?, image=? 
+            SET name=?, price=?, location=?, stock=?, image=? 
             WHERE id=?
         `;
         db.query(
             query,
-            [data.name, data.price, data.location, data.image, id],
+            // PASTIKAN URUTAN ARRAY INI SAMA DENGAN TANDA TANYA DI ATAS
+            [data.name, data.price, data.location, data.stock, data.image, id],
             (err, results) => {
                 callback(err, results);
             }

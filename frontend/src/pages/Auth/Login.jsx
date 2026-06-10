@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import http from '../../utils/http'; // ✅ tambah import
+import http from '../../utils/http'; 
 
 import ambaNormal from '../../assets/mascot1.png'; 
 import ambaClosed from '../../assets/mascot2.png'; 
@@ -10,18 +10,15 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // ✅ TAMBAH STATE FORM
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
 
-  // ✅ TAMBAH HANDLER CHANGE
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ✅ TAMBAH HANDLER SUBMIT
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -33,7 +30,7 @@ function Login() {
       localStorage.setItem('token', token);
 
       alert('Login berhasil!');
-      navigate('/admin/add-product');
+      navigate('/admin');
     } catch (error) {
       console.error(error);
       alert('Email atau password salah.');
@@ -45,13 +42,13 @@ function Login() {
   return (
     <div className="glass-panel p-4 p-sm-5 shadow-lg position-relative mt-5" style={{ width: '100%', maxWidth: '450px', borderRadius: '20px' }}>
       
-      {/* TOMBOL KEMBALI */}
+      {/* TOMBOL KEMBALI MENUJU BERANDA */}
       <button 
         type="button" 
-        onClick={() => navigate(-1)} 
+        onClick={() => navigate('/')} 
         className="btn btn-light text-secondary rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute hover-scale" 
         style={{ top: '24px', left: '24px', width: '38px', height: '38px', zIndex: 10, transition: 'transform 0.2s', border: '1px solid rgba(0,0,0,0.05)' }}
-        title="Kembali"
+        title="Kembali ke Beranda"
       >
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
           <path fillRule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
@@ -65,9 +62,8 @@ function Login() {
       </div>
 
       <h4 className="fw-bold text-center text-dark mb-1 mt-2">Selamat Datang Kembali</h4>
-      <p className="text-center text-secondary mb-4 small">Silakan masuk ke akun AmbaCart Anda</p>
+      <p className="text-center text-secondary mb-4 small">Silakan login ke akun AmbaCart Anda</p>
       
-      {/* ✅ TAMBAH onSubmit */}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label fw-medium text-dark small">Email</label>
@@ -77,7 +73,6 @@ function Login() {
                 <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
               </svg>
             </span>
-            {/* ✅ TAMBAH name & onChange */}
             <input type="email" name="email" className="form-control px-2 py-2 border-0 shadow-none bg-transparent" placeholder="contoh@email.com" onChange={handleChange} required />
           </div>
         </div>
@@ -90,7 +85,6 @@ function Login() {
                 <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2"/>
               </svg>
             </span>
-            {/* ✅ TAMBAH name & onChange */}
             <input type={showPassword ? "text" : "password"} name="password" className="form-control px-2 py-2 border-0 shadow-none bg-transparent" placeholder="Masukkan password" onChange={handleChange} required />
             <button type="button" className="btn btn-eye border-0 text-secondary bg-transparent px-3 d-flex align-items-center" onClick={() => setShowPassword(!showPassword)} style={{ zIndex: 5 }}>
               {showPassword ? (
@@ -109,7 +103,7 @@ function Login() {
         </div>
 
         <button type="submit" className="btn flat-btn-brand w-100 py-2.5 fw-bold mb-3 rounded-3" disabled={loading}>
-          {loading ? 'Memuat...' : 'Masuk Sekarang'}
+          {loading ? 'Memuat...' : 'Login Sekarang'}
         </button>
       </form>
       

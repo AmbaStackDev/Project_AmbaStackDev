@@ -73,7 +73,7 @@ function Navbar({ cartCount }) {
           {/* TAMPILAN STRUKTUR ASLI UNTUK DESKTOP / LAPTOP */}
           <div className="d-none d-lg-flex align-items-center gap-3">
             <Link className="btn btn-login-nav fw-bold px-4 py-2" to="/login">
-              Masuk
+              Login
             </Link>
             <button className="btn flat-btn-brand d-flex align-items-center justify-content-center gap-2 px-4 py-2.5 rounded-3 shadow-sm">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className={isAnimating ? 'animate-pop' : ''} viewBox="0 0 16 16">
@@ -93,7 +93,7 @@ function Navbar({ cartCount }) {
       <div className={`mobile-nav-menu d-lg-none ${isNavOpen ? 'show' : ''}`}>
         <div className="py-3 px-2 text-center border-top mt-2">
           <Link className="btn btn-login-nav w-100 py-2.5 fw-bold rounded-3 shadow-sm" to="/login" onClick={() => setIsNavOpen(false)}>
-            Masuk ke Akun Anda
+            Login ke Akun Anda
           </Link>
         </div>
       </div>

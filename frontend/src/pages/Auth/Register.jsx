@@ -11,10 +11,10 @@ function Register() {
   return (
     <div className="glass-panel p-5 shadow-lg position-relative mt-5" style={{ width: '100%', maxWidth: '450px', borderRadius: '20px' }}>
       
-      {/* TOMBOL KEMBALI */}
+      {/* TOMBOL KEMBALI MENUJU BERANDA */}
       <button 
         type="button" 
-        onClick={() => navigate(-1)} 
+        onClick={() => navigate('/')} 
         className="btn btn-light text-secondary rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute hover-scale" 
         style={{ 
           top: '24px', 
@@ -25,7 +25,7 @@ function Register() {
           transition: 'transform 0.2s',
           border: '1px solid rgba(0,0,0,0.05)'
         }}
-        title="Kembali"
+        title="Kembali ke Beranda"
       >
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
           <path fillRule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>

@@ -14,6 +14,7 @@ class ProductController {
                 name      : p.name,
                 price     : p.price,
                 location  : p.location  || 'Gudang Pusat',
+                stock     : p.stock || 0,
                 sold      : p.sold      || 0,
                 image_url : p.image_url || (p.image ? `/uploads/${p.image}` : null),
             }));
@@ -38,7 +39,7 @@ class ProductController {
     // POST /products
     static store(req, res) {
         // PERBAIKAN: Menangkap name, price, dan location
-        const { name, price, location } = req.body;
+        const { name, price, location, stock, description } = req.body;
 
         // Tangkap filename dari Multer, null jika tidak ada file
         const image = req.file ? req.file.filename : null;
@@ -56,6 +57,8 @@ class ProductController {
             name,
             price,
             location: location || 'Gudang Pusat',
+            stock: stock || 0,
+            description: description || '',
             image,
         };
 
@@ -75,10 +78,9 @@ class ProductController {
     static update(req, res) {
         const id = req.params.id;
         
-        // PERBAIKAN: Menangkap name, price, dan location
-        const { name, price, location } = req.body;
+        // 1. TANGKAP VARIABEL STOCK DARI FRONTEND
+        const { name, price, location, stock, description } = req.body;
 
-        // Validasi input wajib
         if (!name || !price) {
             return res.status(400).json({ status: 400, message: 'Nama dan harga wajib diisi!' });
         }
@@ -86,7 +88,6 @@ class ProductController {
             return res.status(400).json({ status: 400, message: 'Harga harus berupa angka positif!' });
         }
 
-        // Ambil data produk lama dulu untuk menjaga image lama jika tidak upload baru
         ProductModel.getProductById(id, (err, product) => {
             if (err) {
                 return res.status(500).json({ status: 500, message: 'Database Error', error: err.message });
@@ -95,14 +96,14 @@ class ProductController {
                 return res.status(404).json({ status: 404, message: 'Produk tidak ditemukan!' });
             }
 
-            // Jika ada file baru → pakai filename baru, jika tidak → pertahankan image lama
             const image = req.file ? req.file.filename : product.image;
 
-            // PERBAIKAN: Menyimpan data pembaruan yang sesuai
+            // 2. MASUKKAN STOCK KE DALAM DATA YANG AKAN DI-UPDATE
             const data = {
                 name,
                 price,
                 location: location || product.location || 'Gudang Pusat',
+                stock: stock !== undefined ? stock : product.stock, // <--- INI KUNCINYA
                 image,
             };
 
@@ -116,12 +117,11 @@ class ProductController {
                 res.status(200).json({
                     status  : 200,
                     message : 'Update sukses',
-                    data    : { id, name, image },
+                    data    : { id, name, image, stock: data.stock },
                 });
             });
         });
     }
-
     // DELETE /products/:id
     static destroy(req, res) {
         const id = req.params.id;
