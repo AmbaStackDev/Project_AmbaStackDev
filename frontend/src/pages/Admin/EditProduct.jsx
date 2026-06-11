@@ -138,7 +138,7 @@ function EditProduct({ showToast }) {
             <div className="bg-white p-4 p-md-5 rounded-4 shadow-sm w-100 border">
               <div className="mb-4 text-center text-md-start">
                 <h3 className="fw-black text-dark mb-1">Edit Produk</h3>
-                <p className="text-secondary small fw-medium mb-0">Ubah atribut data produk ID #{id} secara real-time.</p>
+                <p className="text-secondary small fw-medium mb-0">Ubah atribut data produk secara langsung.</p>
               </div>
               
               <form onSubmit={handleSubmit}>
