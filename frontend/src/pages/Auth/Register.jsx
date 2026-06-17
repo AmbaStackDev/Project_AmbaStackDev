@@ -1,152 +1,191 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-import ambaNormal from '../../assets/mascot1.png'; 
-import ambaClosed from '../../assets/mascot2.png'; 
+import http from '../../utils/http'; 
+import ambaNormal from '../../assets/mascot1.png';
+import AuthAlertModal from '../../components/Modal/AuthAlertModal';
 
 function Register() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
 
-  return (
-    <div className="glass-panel p-5 shadow-lg position-relative mt-5" style={{ width: '100%', maxWidth: '450px', borderRadius: '20px' }}>
+  // Sesi State kontrol pop-up modal kustom
+  const [alertModal, setAlertModal] = useState({
+    show: false,
+    type: 'success',
+    title: '',
+    message: '',
+    onConfirm: null
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      await http.post('/auth/register', formData);
+
+      // Setup pemicu modal sukses registrasi
+      setAlertModal({
+        show: true,
+        type: 'success',
+        title: 'Pendaftaran Berhasil!',
+        message: 'Akun administrator Anda telah sukses dikonfigurasi. Silakan masuk menggunakan kredensial baru Anda.',
+        onConfirm: () => navigate('/login')
+      });
+    } catch (error) {
+      console.error(error);
+      const errorMsg = error.response?.data?.message || 'Gagal mendaftar. Periksa kembali struktur data Anda.';
       
-      {/* TOMBOL KEMBALI MENUJU BERANDA */}
+      // Setup pemicu modal error kegagalan registrasi database
+      setAlertModal({
+        show: true,
+        type: 'error',
+        title: 'Registrasi Gagal',
+        message: errorMsg,
+        onConfirm: () => setAlertModal(prev => ({ ...prev, show: false }))
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const brandColor = '#03AC0E';
+
+  return (
+    <div className="card shadow-lg border-0 rounded-4 p-4 p-md-5 bg-white position-relative" style={{ maxWidth: '400px', margin: '80px auto 20px auto', overflow: 'visible' }}>
+      
+      {/* Tombol kembali ke beranda */}
       <button 
         type="button" 
         onClick={() => navigate('/')} 
-        className="btn btn-light text-secondary rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute hover-scale" 
+        className="btn btn-light text-secondary rounded-circle shadow-sm d-flex align-items-center justify-content-center position-absolute" 
         style={{ 
-          top: '24px', 
-          left: '24px', 
-          width: '38px', 
-          height: '38px', 
-          zIndex: 10, 
-          transition: 'transform 0.2s',
-          border: '1px solid rgba(0,0,0,0.05)'
+          top: '20px', 
+          left: '20px', 
+          width: '40px', 
+          height: '40px', 
+          zIndex: 20, 
+          backgroundColor: '#f8f9fa',
+          transition: 'all 0.2s ease-in-out'
         }}
         title="Kembali ke Beranda"
+        onMouseOver={e => { e.currentTarget.style.transform = 'scale(1.1)'; e.currentTarget.style.color = brandColor; }}
+        onMouseOut={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.color = '#6c757d'; }}
       >
         <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-          <path fillRule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+          <path fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
         </svg>
       </button>
 
-      {/* MASKOT */}
-      <div 
-        className="text-center" 
-        style={{ 
-          marginTop: '-130px', 
-          marginBottom: '5px', 
-          display: 'grid', 
-          placeItems: 'center', 
-          height: '185px'
-        }}
-      >
+      <style>{`
+        .amba-input-field { transition: all 0.2s ease-in-out; border: 1.5px solid rgba(0,0,0,0.08) !important; }
+        .amba-input-field:hover { border-color: ${brandColor}50 !important; background-color: #ffffff !important; }
+        .amba-input-field:focus { border-color: ${brandColor} !important; box-shadow: 0 0 0 0.25rem rgba(3, 172, 14, 0.15) !important; background-color: #ffffff !important; }
+        .btn-amba-submit { background-color: ${brandColor} !important; border: none !important; transition: all 0.2s ease-in-out !important; }
+        .btn-amba-submit:hover { background-color: #028a0a !important; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(3, 172, 14, 0.25); }
+        .btn-amba-submit:active { transform: translateY(0); }
+        .eye-icon-smooth { transition: color 0.2s ease-in-out, transform 0.2s ease-in-out; }
+        .eye-icon-smooth:hover { color: ${brandColor} !important; transform: scale(1.1); }
+      `}</style>
+
+      {/* MASKOT POP-OUT */}
+      <div className="text-center mb-4 position-relative" style={{ marginTop: '-75px', zIndex: 10 }}>
         <img 
           src={ambaNormal} 
-          alt="AmbaCart Ambassador" 
-          style={{ 
-            gridArea: '1 / 1 / 2 / 2',
-            height: '185px', 
-            objectFit: 'contain', 
-            transition: 'opacity 0.15s ease-in-out',
-            filter: 'drop-shadow(0 10px 10px rgba(0,0,0,0.15))',
-            opacity: showPassword ? 0 : 1,
-            zIndex: showPassword ? 1 : 2
-          }} 
+          alt="Mascot" 
+          className="img-fluid mb-2" 
+          style={{ maxWidth: '110px', filter: 'drop-shadow(0 10px 12px rgba(0,0,0,0.15))' }} 
         />
-        <img 
-          src={ambaClosed} 
-          alt="AmbaCart Ambassador Eyes Closed" 
-          style={{ 
-            gridArea: '1 / 1 / 2 / 2',
-            height: '185px', 
-            objectFit: 'contain', 
-            transition: 'opacity 0.15s ease-in-out',
-            filter: 'drop-shadow(0 10px 10px rgba(0,0,0,0.15))',
-            opacity: showPassword ? 1 : 0,
-            zIndex: showPassword ? 2 : 1
-          }} 
-        />
+        <h3 className="fw-black text-dark mb-1">Daftar Akun</h3>
+        <p className="text-secondary small fw-medium mb-0">Bergabung ke dalam ekosistem AmbaCart</p>
       </div>
 
-      <h4 className="fw-bold text-center text-dark mb-1 mt-2">Daftar Akun Baru</h4>
-      <p className="text-center text-secondary mb-4 small">Bergabunglah dengan ekosistem AmbaCart</p>
-      
-      <form>
-        {/* INPUT NAMA LENGKAP DENGAN ICON ORANG */}
+      <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label className="form-label fw-medium text-dark small">Nama Lengkap</label>
-          <div className="input-group custom-input-group shadow-sm bg-white rounded-3 overflow-hidden">
-            <span className="input-group-text bg-transparent border-0 text-secondary ps-3 pe-1">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-              </svg>
-            </span>
-            <input type="text" className="form-control px-2 py-2 border-0 shadow-none bg-transparent" placeholder="Nama Lengkap Anda" required />
-          </div>
+          <label className="form-label fw-bold small text-dark">Nama Lengkap</label>
+          <input 
+            type="text" 
+            name="name" 
+            className="form-control p-3 bg-light amba-input-field" 
+            placeholder="Ketik nama lengkap..." 
+            value={formData.name}
+            onChange={handleChange}
+            required 
+          />
         </div>
-        
-        {/* INPUT EMAIL DENGAN ICON */}
+
         <div className="mb-3">
-          <label className="form-label fw-medium text-dark small">Email</label>
-          <div className="input-group custom-input-group shadow-sm bg-white rounded-3 overflow-hidden">
-            <span className="input-group-text bg-transparent border-0 text-secondary ps-3 pe-1">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
-              </svg>
-            </span>
-            <input type="email" className="form-control px-2 py-2 border-0 shadow-none bg-transparent" placeholder="contoh@email.com" required />
-          </div>
+          <label className="form-label fw-bold small text-dark">Email</label>
+          <input 
+            type="email" 
+            name="email" 
+            className="form-control p-3 bg-light amba-input-field" 
+            placeholder="nama@email.com" 
+            value={formData.email}
+            onChange={handleChange}
+            required 
+          />
         </div>
-        
-        {/* INPUT PASSWORD DENGAN ICON KIRI & KANAN */}
+
         <div className="mb-4">
-          <label className="form-label fw-medium text-dark small">Password</label>
-          <div className="input-group custom-input-group shadow-sm bg-white rounded-3 overflow-hidden">
-            <span className="input-group-text bg-transparent border-0 text-secondary ps-3 pe-1">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2"/>
-              </svg>
-            </span>
+          <label className="form-label fw-bold small text-dark">Password</label>
+          <div className="input-group rounded-3 overflow-hidden position-relative">
             <input 
               type={showPassword ? "text" : "password"} 
-              className="form-control px-2 py-2 border-0 shadow-none bg-transparent" 
-              placeholder="Minimal 8 karakter" 
+              name="password" 
+              className="form-control p-3 bg-light amba-input-field" 
+              placeholder="Buat sandi yang aman..." 
+              value={formData.password}
+              onChange={handleChange}
               required 
             />
             <button 
               type="button" 
-              className="btn btn-eye border-0 text-secondary bg-transparent px-3 d-flex align-items-center" 
+              className="btn position-absolute end-0 top-50 translate-middle-y border-0 bg-transparent px-3 text-secondary eye-icon-smooth" 
               onClick={() => setShowPassword(!showPassword)}
-              style={{ zIndex: 5 }}
+              style={{ zIndex: 10 }}
             >
               {showPassword ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474L3.086 5.212C1.612 6.397.737 7.712.735 7.715a.5.5 0 0 0 0 .57c.163.26 1.385 2.15 3.426 3.728 2.04 1.579 4.417 2.42 6.629 2.42a11.4 11.4 0 0 0 1.004-.05C10.79 12.912 10.79 12.912 10.79 12.912M9.986 9.57l-1.12-1.119c.1-.137.145-.296.145-.451a1.5 1.5 0 0 0-1.5-1.5c-.156 0-.315.045-.451.145L5.943 5.529a3.5 3.5 0 0 1 4.043 4.043m.254 1.4-1.51-1.512A1.5 1.5 0 0 0 7.93 7.93l-1.512-1.51A1.5 1.5 0 0 0 5.07 9.34l1.51 1.512A1.5 1.5 0 0 0 9.34 9.34l1.512 1.51a1.5 1.5 0 0 0 1.132-.213"/>
-                  <path d="M14.265 11.182c1.474-1.183 2.348-2.498 2.35-2.5a.5.5 0 0 0 0-.57C16.452 7.852 15.23 5.96 13.19 4.383 11.15 2.804 8.773 1.96 6.561 1.96c-.34 0-.676.02-1.003.058L3.92 4.4l-1.31-1.31A1 1 0 0 0 1.196 4.5l11.45 11.45a1 1 0 0 0 1.41-1.41l-1.04-1.04-.325-.325zM11.77 10.42 10.35 9a1.5 1.5 0 0 0-1.42-1.42L7.5 6.16a3.5 3.5 0 0 1 4.27 4.27z"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
+                  <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>
                 </svg>
               ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
-                  <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                  <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
                 </svg>
               )}
             </button>
           </div>
         </div>
 
-        <button type="submit" className="btn flat-btn-brand w-100 py-2.5 fw-bold mb-3 rounded-3">
-          Buat Akun
+        <button 
+          type="submit" 
+          className="btn w-100 text-white fw-bold py-3 btn-amba-submit rounded-3 mb-3"
+          disabled={loading}
+        >
+          {loading ? 'Memproses Akun...' : 'Daftar Sekarang'}
         </button>
-      </form>
-      
-      <div className="text-center mt-4">
-        <p className="small text-secondary mb-0">
-          Sudah punya akun? <Link to="/login" className="fw-bold text-brand text-decoration-none">Masuk di sini</Link>
+
+        <p className="text-center small fw-medium text-secondary mt-3 mb-0">
+          Sudah punya akun? <Link to="/login" style={{ color: brandColor, textDecoration: 'none', fontWeight: 'bold' }}>Masuk di sini</Link>
         </p>
-      </div>
+      </form>
+
+      {/* RENDER MODAL ALER AUTH TERPISAH */}
+      <AuthAlertModal 
+        show={alertModal.show}
+        type={alertModal.type}
+        title={alertModal.title}
+        message={alertModal.message}
+        onClose={alertModal.onConfirm}
+      />
     </div>
   );
 }

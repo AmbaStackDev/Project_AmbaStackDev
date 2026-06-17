@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; 
+import { Link } from 'react-router-dom'; 
 import { getProducts, deleteProduct } from '../../utils/productApi';
+import AdminNavbar from '../../components/Navbar/AdminNavbar';
 import mascotAdmin from '../../assets/mascotadmin.png'; 
-import logoImg from '../../assets/logo.png';
 
 function AdminDashboard({ showToast }) {
-  const navigate = useNavigate();
-
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   
@@ -15,11 +13,8 @@ function AdminDashboard({ showToast }) {
   const [sortOrder, setSortOrder] = useState('NEWEST'); 
   
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  
   const [showModal, setShowModal] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
-
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const brandColor = '#03AC0E';
 
@@ -97,57 +92,15 @@ function AdminDashboard({ showToast }) {
     return `http://localhost:8000${cleanPath}`;
   };
 
-  const executeLogout = () => {
-    logout(); // Memanggil fungsi dari Context API
-    if (showToast) showToast("Berhasil Logout dari sesi admin.");
-    navigate('/login'); 
-  };
-
-
   return (
     <div className="min-vh-100 d-flex flex-column" style={{ background: '#f8f9fa', paddingBottom: '3rem' }}>
       
-      <style>{`
-        .nav-link-custom { color: #6c757d; text-decoration: none; font-weight: 600; transition: color 0.2s; padding: 8px 12px; border: none; background: transparent; }
-        .nav-link-custom:hover { color: ${brandColor}; background-color: transparent; }
-        .nav-link-active { color: ${brandColor}; text-decoration: none; font-weight: 700; border-bottom: 2px solid ${brandColor}; padding: 8px 0px; margin: 0 12px; }
-      `}</style>
-
-      {/* NAVBAR */}
-      <nav className="navbar sticky-top shadow-sm px-4 py-3 bg-white" style={{ zIndex: 1040 }}>
-        <div className="container-fluid d-flex align-items-center justify-content-between">
-          <Link className="navbar-brand fw-bold d-flex align-items-center m-0" to="/admin" style={{ color: brandColor }}>
-            <img src={logoImg} alt="Logo" height="30" className="me-2" />
-            AmbaCart <span className="text-secondary fw-medium fs-6 ms-2 d-none d-sm-inline">| Admin</span>
-          </Link>
-          <div className="d-flex align-items-center gap-2 gap-md-3">
-            <Link to="/admin" className="nav-link-active">Dashboard</Link>
-            
-            {/* TOMBOL WARNA 100% AMBAGREEN */}
-            <Link to="/admin/add" className="btn btn-sm text-white fw-bold px-3 py-2 rounded-pill shadow-sm d-none d-md-flex align-items-center gap-1" style={{ backgroundColor: brandColor, border: 'none' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-              </svg>
-              Tambah Produk
-            </Link>
-            
-            <button 
-              onClick={() => setShowLogoutModal(true)} 
-              className="btn btn-outline-danger btn-sm fw-bold px-3 py-2 rounded-pill shadow-sm d-flex align-items-center gap-2 ms-2"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path fillRule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
-                <path fillRule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
-              </svg>
-              Logout
-            </button>
-          </div>
-        </div>
-      </nav>
+      {/* MENGGUNAKAN NAVBAR TERPISAH */}
+      <AdminNavbar showToast={showToast} />
 
       <div className="container px-3" style={{ marginTop: '5rem' }}>
         
-        {/* BANNER 3D POP-OUT DESAIN BARU */}
+        {/* BANNER 3D POP-OUT */}
         <div className="rounded-4 shadow-sm position-relative border-0 mb-5" 
              style={{ 
                background: 'linear-gradient(135deg, #03AC0E 0%, #06850E 100%)', 
@@ -157,7 +110,6 @@ function AdminDashboard({ showToast }) {
             <h2 className="fw-black mb-2 fs-2 text-white">Dashboard Admin</h2>
             <p className="mb-0 fw-medium opacity-90 text-white">Kelola daftar produk dan sisa stok toko Anda dengan mudah.</p>
           </div>
-          
           <img 
             src={mascotAdmin} 
             alt="Mascot" 
@@ -174,7 +126,6 @@ function AdminDashboard({ showToast }) {
 
         {/* BARIS KONTROL */}
         <div className="d-flex flex-column flex-xl-row justify-content-between gap-3 mb-4">
-          
           <div className="flex-grow-1" style={{ maxWidth: '400px' }}>
             <input 
               type="text" 
@@ -186,14 +137,13 @@ function AdminDashboard({ showToast }) {
           </div>
 
           <div className="d-flex flex-wrap gap-2 align-items-center justify-content-start justify-content-xl-end">
-            
             <div className="btn-group bg-white p-1 rounded-4 shadow-sm me-md-2">
               <button onClick={() => setFilterTab('ALL')} className={`btn btn-sm fw-bold rounded-pill px-3 ${filterTab === 'ALL' ? 'text-white' : 'text-secondary'}`} style={{ backgroundColor: filterTab === 'ALL' ? brandColor : 'transparent', border: 'none' }}>Semua</button>
               <button onClick={() => setFilterTab('LOW')} className={`btn btn-sm fw-bold rounded-pill px-3 ${filterTab === 'LOW' ? 'btn-warning text-dark' : 'text-secondary'}`} style={{ border: 'none' }}>Menipis</button>
               <button onClick={() => setFilterTab('EMPTY')} className={`btn btn-sm fw-bold rounded-pill px-3 ${filterTab === 'EMPTY' ? 'btn-danger text-white' : 'text-secondary'}`} style={{ border: 'none' }}>Habis</button>
             </div>
 
-            {/* CUSTOM REACT DROPDOWN */}
+            {/* CUSTOM DROPDOWN */}
             <div className="position-relative" style={{ minWidth: '220px' }}>
               <div 
                 className="bg-white px-3 py-2 rounded-4 shadow-sm d-flex align-items-center justify-content-between" 
@@ -212,10 +162,7 @@ function AdminDashboard({ showToast }) {
               </div>
 
               {isDropdownOpen && (
-                <div 
-                  className="position-absolute bg-white rounded-4 shadow border-0 mt-2 w-100 overflow-hidden py-2" 
-                  style={{ zIndex: 1050, top: '100%', right: 0 }}
-                >
+                <div className="position-absolute bg-white rounded-4 shadow border-0 mt-2 w-100 overflow-hidden py-2" style={{ zIndex: 1050, top: '100%', right: 0 }}>
                   {sortOptions.map(option => (
                     <div
                       key={option.value}
@@ -249,7 +196,6 @@ function AdminDashboard({ showToast }) {
             <button onClick={handleExportCSV} className="btn fw-bold shadow-sm rounded-4 px-4 py-2 text-white ms-md-2" style={{ background: brandColor, border: 'none' }}>
               Download CSV
             </button>
-
           </div>
         </div>
 
@@ -329,28 +275,6 @@ function AdminDashboard({ showToast }) {
             <div className="d-flex gap-2">
               <button onClick={() => setShowModal(false)} className="btn btn-light fw-bold w-100 rounded-3 text-secondary border">Batal</button>
               <button onClick={executeDelete} className="btn btn-danger fw-bold w-100 rounded-3 shadow-sm">Ya, Hapus</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* POPUP MODAL LOGOUT BARU */}
-      {showLogoutModal && (
-        <div className="custom-modal-overlay px-3" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1050, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(3px)' }}>
-          <div className="bg-white p-4 p-md-5 border w-100 text-center shadow-lg" style={{ maxWidth: '400px', borderRadius: '24px' }}>
-            <div className="mb-3 text-danger d-flex justify-content-center">
-              <div className="bg-danger bg-opacity-10 p-3 rounded-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
-                  <path fillRule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
-                  <path fillRule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
-                </svg>
-              </div>
-            </div>
-            <h4 className="fw-black text-dark mb-2">Ingin Logout?</h4>
-            <p className="text-secondary small mb-4 px-2">Anda akan Logout dari sesi administrator. Anda harus login kembali untuk mengelola toko.</p>
-            <div className="d-flex flex-column gap-2">
-              <button onClick={executeLogout} className="btn btn-danger fw-bold w-100 py-2.5 rounded-pill shadow-sm">Ya, Logout Sekarang</button>
-              <button onClick={() => setShowLogoutModal(false)} className="btn btn-light fw-bold w-100 py-2.5 rounded-pill text-secondary border">Batal</button>
             </div>
           </div>
         </div>

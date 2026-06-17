@@ -4,16 +4,16 @@ import { Outlet } from 'react-router-dom';
 function AuthLayout() {
   return (
     <div 
-      className="min-vh-100 d-flex flex-column align-items-center justify-content-center" 
+      className="min-vh-100 d-flex align-items-center justify-content-center" 
       style={{ 
-        background: 'linear-gradient(135deg, #d1fae5 0%, #e0eafc 100%)', 
-        padding: '20px',
-        paddingTop: '40px', // Ditambah menjadi 160px agar maskot besar bebas bernapas
-        boxSizing: 'border-box'
+        background: 'linear-gradient(135deg, #f0fdf4 0%, #e0eafc 100%)', 
+        padding: '20px' 
       }}
     >
-      {/* Konten Halaman Login / Register */}
-      <Outlet />
+      <div className="w-100 position-relative" style={{ maxWidth: '450px' }}>
+        {/* Konten Login & Register akan dimuat di dalam Outlet ini */}
+        <Outlet />
+      </div>
     </div>
   );
 }
