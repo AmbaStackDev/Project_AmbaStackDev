@@ -19,7 +19,7 @@ function Hero() {
   return (
     <div className="glass-panel mb-5 mt-4 position-relative shadow" style={{ borderRadius: '24px', overflow: 'visible', background: 'rgba(3, 172, 14, 1.0)' }}>
       <div className="container px-4 px-md-5">
-        <div className="row d-flex align-items-md-center justify-content-md-between" style={{ minHeight: '380px' }}>
+        <div className="row d-flex align-items-md-center justify-content-md-between" style={{ minHeight: '380px' , marginTop:'80px'}}>
           
           <div className="col-12 col-md-5 text-center position-relative z-1 order-md-2 mb-3 mb-md-0" style={{ display: 'grid', placeItems: 'center' }}>
             {images.map((img, index) => (

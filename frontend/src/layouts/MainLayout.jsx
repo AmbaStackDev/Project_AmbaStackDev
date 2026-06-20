@@ -1,23 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar/Navbar';
 import Footer from '../components/Footer/Footer';
+import { AuthContext } from '../context/AuthContext'; 
+import AuthAlertModal from '../components/Modal/AuthAlertModal'; // IMPORT MODAL KUSTOM
 
 function MainLayout() {
-  // STATE MANAJEMEN KERANJANG TERPUSAT UNTUK HALAMAN PUBLIK
+  const { token } = useContext(AuthContext); 
+  const navigate = useNavigate();
+
   const [cart, setCart] = useState([]);
   const [cartCount, setCartCount] = useState(0);
   const [showScrollTop, setShowScrollTop] = useState(false);
+
+  // State untuk mengontrol Modal Alert
+  const [alertModal, setAlertModal] = useState({
+    show: false, type: 'error', title: '', message: '', onConfirm: null
+  });
 
   useEffect(() => {
     setCartCount(cart.length);
   }, [cart]);
 
+  // FIXED: Fungsi add to cart kini menggunakan Modal Kustom
   const handleAddToCart = (product) => {
+    if (!token) {
+      setAlertModal({
+        show: true,
+        type: 'error',
+        title: 'Akses Dibatasi',
+        message: 'Oops! Silakan Login terlebih dahulu untuk memasukkan barang ke keranjang belanja Anda.',
+        onConfirm: () => {
+          setAlertModal(prev => ({ ...prev, show: false }));
+          navigate('/login');
+        }
+      });
+      return;
+    }
     setCart((prevCart) => [...prevCart, product]);
   };
 
-  // DETEKSI SCROLL PENGGUNA
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 300) {
@@ -39,34 +61,31 @@ function MainLayout() {
 
   return (
     <div className="d-flex flex-column min-vh-100 position-relative" style={{ background: '#f8f9fa' }}>
-      {/* Navbar menerima hitungan counter secara dinamis */}
       <Navbar cartCount={cartCount} />
       
       <main className="container-fluid flex-grow-1 px-2 px-md-5 mt-4">
-        {/* Mengoper fungsi handleAddToCart ke komponen anak seperti Home dan ProductDetail */}
         <Outlet context={{ handleAddToCart }} /> 
       </main>
       
       <Footer />
 
-      {/* FIXED: Tombol meluncur ke atas yang bulat sempurna, kecil, dan presisi di kanan bawah */}
+      {/* RENDER MODAL ALERT */}
+      <AuthAlertModal 
+        show={alertModal.show} 
+        type={alertModal.type} 
+        title={alertModal.title} 
+        message={alertModal.message} 
+        onClose={alertModal.onConfirm} 
+      />
+
       <button
         onClick={scrollToTop}
         className="btn shadow-lg text-white"
         style={{
-          position: 'fixed',
-          bottom: '30px',
-          right: '30px',
-          width: '45px',
-          height: '45px',
-          borderRadius: '50%',
-          backgroundColor: '#03AC0E',
-          zIndex: 2000,
-          display: showScrollTop ? 'flex' : 'none',
-          alignItems: 'center',
-          justifyContent: 'center',
-          transition: 'all 0.3s ease-in-out',
-          border: 'none'
+          position: 'fixed', bottom: '30px', right: '30px', width: '45px', height: '45px',
+          borderRadius: '50%', backgroundColor: '#03AC0E', zIndex: 2000,
+          display: showScrollTop ? 'flex' : 'none', alignItems: 'center', justifyContent: 'center',
+          transition: 'all 0.3s ease-in-out', border: 'none'
         }}
         aria-label="Scroll to top"
       >

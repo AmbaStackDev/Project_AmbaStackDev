@@ -1,6 +1,6 @@
 const UserModel = require('../models/UserModel');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken'); // ← TAMBAHAN BARU
+const jwt = require('jsonwebtoken');
 
 class AuthController {
     static async register(req, res) {
@@ -10,6 +10,9 @@ class AuthController {
             return res.status(400).json({ success: false, message: 'Nama, Email, dan Password wajib diisi!' });
         }
 
+        // PERBAIKAN BUG: Jika role tidak dikirim dari Frontend, paksa menjadi 'customer'
+        const finalRole = role || 'customer';
+
         UserModel.findByEmail(email, async (err, results) => {
             if (err) return res.status(500).json({ success: false, error: err.message });
             if (results.length > 0) return res.status(400).json({ success: false, message: 'Email sudah terdaftar!' });
@@ -18,7 +21,8 @@ class AuthController {
                 const salt = await bcrypt.genSalt(10);
                 const hashedPassword = await bcrypt.hash(password, salt);
 
-                UserModel.create({ name, email, password: hashedPassword, role }, (err, insertResult) => {
+                // Masukkan finalRole ke dalam database
+                UserModel.create({ name, email, password: hashedPassword, role: finalRole }, (err, insertResult) => {
                     if (err) return res.status(500).json({ success: false, error: err.message });
                     res.status(201).json({ success: true, message: 'Register berhasil! Silakan login.' });
                 });

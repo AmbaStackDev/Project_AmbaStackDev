@@ -7,6 +7,8 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
 
+import Profile from './pages/Profile';
+
 // IMPORT HALAMAN PUBLIK
 import Home from './pages/Home';
 import ProductDetail from './pages/ProductDetail';
@@ -21,6 +23,11 @@ import AdminDashboard from './pages/Admin/AdminDashboard';
 import AddProduct from './pages/Admin/AddProduct';
 import EditProduct from './pages/Admin/EditProduct';
 
+// IMPORT HALAMAN BANTUAN FOOTER
+import CaraBelanja from './pages/CaraBelanja';
+import ContactUs from './pages/ContactUs';
+import FAQ from './pages/FAQ'; // <-- UBAH Faq MENJADI FAQ
+
 function App() {
   return (
     <AuthProvider>
@@ -29,6 +36,12 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/profile" element={
+            <ProtectedRoute><Profile /></ProtectedRoute>
+          } />
+          <Route path="/cara-belanja" element={<CaraBelanja />} />
+          <Route path="/hubungi-kami" element={<ContactUs />} />
+          <Route path="/faq" element={<FAQ />} />
         </Route>
 
         {/* RUTE AUTENTIKASI (Dibungkus AuthLayout agar CSS & Posisi Tidak Hancur) */}

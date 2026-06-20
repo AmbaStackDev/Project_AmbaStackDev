@@ -1,12 +1,26 @@
-import React from 'react';
-import { Link } from 'react-router-dom'; // <-- IMPORT LINK
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext'; // <-- IMPORT AUTH CONTEXT
 import './Product.css'; 
 
 function Product({ id, name, price, image, location, stock, onAddToCart }) {
+  // Mengambil token untuk mengecek role
+  const { token } = useContext(AuthContext);
+  
+  let userRole = 'customer';
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      userRole = payload.role || 'customer';
+    } catch (e) {}
+  }
+  
+  // Deteksi apakah yang login adalah Admin
+  const isAdmin = userRole === 'admin';
+
   return (
     <div className="glass-card h-100 d-flex flex-column p-2 p-sm-3 product-card-hover bg-white bg-opacity-75">
       
-      {/* Gambar Bisa Diklik menuju Detail */}
       <Link to={`/product/${id}`} className="rounded-3 overflow-hidden mb-2 mb-md-3 bg-white d-flex align-items-center justify-content-center product-img-box text-decoration-none" style={{ cursor: 'pointer' }}>
         <img 
           src={image} 
@@ -18,10 +32,7 @@ function Product({ id, name, price, image, location, stock, onAddToCart }) {
         />
       </Link>
       
-      {/* Informasi Detil Produk */}
       <div className="card-body p-1 p-sm-0 d-flex flex-column text-start">
-        
-        {/* Judul Bisa Diklik menuju Detail */}
         <Link to={`/product/${id}`} className="text-decoration-none">
           <h6 className="fw-semibold text-dark mb-1 lh-sm product-title-text" title={name} style={{ transition: 'color 0.2s' }} onMouseOver={e => e.currentTarget.style.color = '#03AC0E'} onMouseOut={e => e.currentTarget.style.color = '#212529'}>
             {name}
@@ -46,7 +57,6 @@ function Product({ id, name, price, image, location, stock, onAddToCart }) {
         </p>
       </div>
       
-      {/* Indikator Stok */}
       <div className="mt-2 mb-2">
         {stock > 0 ? (
           <span className="badge bg-success bg-opacity-10 border border-success border-opacity-25 small" style={{ color: '#03AC0E' }}>
@@ -59,15 +69,19 @@ function Product({ id, name, price, image, location, stock, onAddToCart }) {
         )}
       </div>
 
-      {/* Tombol Add to Cart */}
       <div className="mt-auto pt-1 pt-sm-2">
+        {/* STRICT MODE: Menonaktifkan tombol jika statusnya Admin */}
         <button 
           onClick={onAddToCart} 
-          disabled={stock <= 0} 
+          disabled={stock <= 0 || isAdmin} 
           className="btn w-100 py-1.5 py-sm-2 fw-semibold rounded-3 text-truncate btn-add-cart-text shadow-sm"
-          style={{ background: stock > 0 ? '#03AC0E' : '#e9ecef', color: stock > 0 ? 'white' : '#adb5bd' }}
+          style={{ 
+            background: isAdmin ? '#e2e8f0' : (stock > 0 ? '#03AC0E' : '#e9ecef'), 
+            color: isAdmin ? '#64748b' : (stock > 0 ? 'white' : '#adb5bd'),
+            cursor: (isAdmin || stock <= 0) ? 'not-allowed' : 'pointer'
+          }}
         >
-          {stock > 0 ? "+ Keranjang" : "Kosong"}
+          {isAdmin ? "Mode Admin" : (stock > 0 ? "+ Keranjang" : "Kosong")}
         </button>
       </div>
     </div>
