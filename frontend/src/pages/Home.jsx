@@ -9,6 +9,7 @@ function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeCategory, setActiveCategory] = useState("Semua Kategori");
 
   const categories = [
     "Semua Kategori",
@@ -35,6 +36,13 @@ function Home() {
     loadData();
   }, []);
 
+  const filteredProducts =
+    activeCategory === "Semua Kategori"
+      ? products
+      : products.filter(
+          (product) => Number(product.category_id) === categories.indexOf(activeCategory)
+        );
+
   return (
     <div className="container-fluid p-0">
       <Hero />
@@ -54,10 +62,11 @@ function Home() {
           {categories.map((cat, idx) => (
             <button
               key={idx}
+              onClick={() => setActiveCategory(cat)}
               className={`btn rounded-pill px-4 py-2 fw-semibold border shadow-sm flex-shrink-0 ${
-                idx === 0 ? "btn-success" : "btn-light text-secondary bg-white"
+                activeCategory === cat ? "btn-success text-white" : "btn-light text-secondary bg-white"
               }`}
-              style={idx === 0 ? { backgroundColor: '#03AC0E', borderColor: '#03AC0E' } : {}}
+              style={activeCategory === cat ? { backgroundColor: '#03AC0E', borderColor: '#03AC0E' } : {}}
             >
               {cat}
             </button>
@@ -74,13 +83,13 @@ function Home() {
           <div className="alert alert-danger text-center p-4 mx-auto" style={{ maxWidth: "600px" }}>
             {error}
           </div>
-        ) : products.length === 0 ? (
+        ) : filteredProducts.length === 0 ? (
           <div className="text-center my-5 py-5 mx-auto" style={{ maxWidth: "600px" }}>
             <h4 className="fw-bold text-dark">Oops, etalase sedang kosong!</h4>
           </div>
         ) : (
           <div className="row g-2 g-md-4 mb-5">
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <div className="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2" key={product.id}>
                 <Product
                   id={product.id} /* <--- SANGAT PENTING UNTUK LINK DETAIL */

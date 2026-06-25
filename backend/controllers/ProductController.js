@@ -10,13 +10,14 @@ class ProductController {
             }
             // Mapping kolom DB → skema JSON Sprint 10
             const mapped = results.map(p => ({
-                id        : p.id,
-                name      : p.name,
-                price     : p.price,
-                location  : p.location  || 'Gudang Pusat',
-                stock     : p.stock || 0,
-                sold      : p.sold      || 0,
-                image_url : p.image_url || (p.image ? `/uploads/${p.image}` : null),
+                id          : p.id,
+                name        : p.name,
+                price       : p.price,
+                location    : p.location  || 'Gudang Pusat',
+                stock       : p.stock || 0,
+                sold        : p.sold      || 0,
+                image_url   : p.image_url || (p.image ? `/uploads/${p.image}` : null),
+                category_id : p.category_id,
             }));
             res.status(200).json({ success: true, data: mapped });
         });
