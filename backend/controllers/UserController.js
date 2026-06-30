@@ -20,15 +20,16 @@ class UserController {
         const userId = req.user.id;
         const { name, phone_number, address, city, postal_code } = req.body;
 
-        if (!name) {
-            return res.status(400).json({ success: false, message: 'Nama lengkap wajib diisi!' });
+        // FIXED: Validasi Strict. Semua data harus ada!
+        if (!name || !phone_number || !address || !city || !postal_code) {
+            return res.status(400).json({ success: false, message: 'Semua kolom (Nama, No HP, Kota, Kode Pos, Alamat Detail) wajib diisi!' });
         }
 
         const updateData = { name, phone_number, address, city, postal_code };
 
         UserModel.updateProfile(userId, updateData, (err, result) => {
             if (err) return res.status(500).json({ success: false, error: err.message });
-            res.status(200).json({ success: true, message: 'Profil Anda sukses diperbarui!' });
+            res.status(200).json({ success: true, message: 'Profil berhasil diperbarui' });
         });
     }
 }

@@ -8,7 +8,7 @@ class ProductController {
             if (err) {
                 return res.status(500).json({ status: 500, message: 'Database Error', error: err.message });
             }
-            // Mapping kolom DB → skema JSON Sprint 10
+            // Mapping kolom DB → skema JSON
             const mapped = results.map(p => ({
                 id          : p.id,
                 name        : p.name,
@@ -39,13 +39,10 @@ class ProductController {
 
     // POST /products
     static store(req, res) {
-        // PERBAIKAN: Menangkap name, price, dan location
-        const { name, price, location, stock, description } = req.body;
-
-        // Tangkap filename dari Multer, null jika tidak ada file
+        // FIXED: Menambahkan category_id agar ditangkap dari Frontend
+        const { name, price, location, stock, description, category_id } = req.body;
         const image = req.file ? req.file.filename : null;
 
-        // Validasi input wajib
         if (!name || !price) {
             return res.status(400).json({ status: 400, message: 'Nama dan harga wajib diisi!' });
         }
@@ -53,13 +50,13 @@ class ProductController {
             return res.status(400).json({ status: 400, message: 'Harga harus berupa angka positif!' });
         }
 
-        // PERBAIKAN: Menyimpan data yang sesuai
         const data = {
             name,
             price,
             location: location || 'Gudang Pusat',
             stock: stock || 0,
             description: description || '',
+            category_id: category_id || null, // FIXED: Simpan kategori ke Database
             image,
         };
 
@@ -79,8 +76,8 @@ class ProductController {
     static update(req, res) {
         const id = req.params.id;
         
-        // 1. TANGKAP VARIABEL STOCK DARI FRONTEND
-        const { name, price, location, stock, description } = req.body;
+        // FIXED: Menangkap category_id saat proses Edit
+        const { name, price, location, stock, description, category_id } = req.body;
 
         if (!name || !price) {
             return res.status(400).json({ status: 400, message: 'Nama dan harga wajib diisi!' });
@@ -99,12 +96,13 @@ class ProductController {
 
             const image = req.file ? req.file.filename : product.image;
 
-            // 2. MASUKKAN STOCK KE DALAM DATA YANG AKAN DI-UPDATE
             const data = {
                 name,
                 price,
                 location: location || product.location || 'Gudang Pusat',
-                stock: stock !== undefined ? stock : product.stock, // <--- INI KUNCINYA
+                stock: stock !== undefined ? stock : product.stock,
+                description: description !== undefined ? description : product.description, // FIXED: Deskripsi juga dipertahankan
+                category_id: category_id !== undefined && category_id !== "" ? category_id : product.category_id, // FIXED: Update Kategori
                 image,
             };
 
@@ -118,11 +116,12 @@ class ProductController {
                 res.status(200).json({
                     status  : 200,
                     message : 'Update sukses',
-                    data    : { id, name, image, stock: data.stock },
+                    data    : { id, name, image, stock: data.stock, category_id: data.category_id },
                 });
             });
         });
     }
+    
     // DELETE /products/:id
     static destroy(req, res) {
         const id = req.params.id;

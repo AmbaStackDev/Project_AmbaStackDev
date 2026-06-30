@@ -1,0 +1,10 @@
+const express = require('express');
+const router = express.Router();
+const NotificationController = require('../controllers/NotificationController');
+const { verifyToken } = require('../middleware/authMiddleware');
+router.get('/', verifyToken, NotificationController.getNotifs);
+router.get('/unread', verifyToken, NotificationController.getUnreadCount);
+router.post('/', verifyToken, NotificationController.createNotif);
+router.put('/read', verifyToken, NotificationController.markAllAsRead);
+router.delete('/', verifyToken, NotificationController.clearAll);
+module.exports = router;

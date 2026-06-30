@@ -215,8 +215,7 @@ function Profile() {
                       <label className="form-label fw-bold small text-secondary ms-1">Nomor Handphone</label>
                       <div className="position-relative">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="amba-input-group-icon" viewBox="0 0 16 16"><path d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H5z"/><path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>
-                        <input type="text" name="phone_number" className="form-control bg-light amba-input-field fw-bold text-dark" placeholder="Contoh: 08123456789" value={formData.phone_number} onChange={handleChange} />
-                      </div>
+<input type="text" name="phone_number" className="form-control bg-light amba-input-field fw-bold text-dark" placeholder="Contoh: 08123456789" value={formData.phone_number} onChange={handleChange} required />                      </div>
                     </div>
                   </div>
 
@@ -238,24 +237,21 @@ function Profile() {
                       <label className="form-label fw-bold small text-secondary ms-1">Kota / Kabupaten</label>
                       <div className="position-relative">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="amba-input-group-icon" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>
-                        <input type="text" name="city" className="form-control bg-light amba-input-field fw-bold text-dark" placeholder="Ketik kota tujuan..." value={formData.city} onChange={handleChange} />
-                      </div>
+                        <input type="text" name="city" className="form-control bg-light amba-input-field fw-bold text-dark" placeholder="Ketik kota tujuan..." value={formData.city} onChange={handleChange} required />                      </div>
                     </div>
 
                     <div className="col-md-4 position-relative">
                       <label className="form-label fw-bold small text-secondary ms-1">Kode Pos</label>
                       <div className="position-relative">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="amba-input-group-icon" viewBox="0 0 16 16"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/></svg>
-                        <input type="text" name="postal_code" className="form-control bg-light amba-input-field fw-bold text-dark" placeholder="16514" value={formData.postal_code} onChange={handleChange} maxLength={5} />
-                      </div>
+                        <input type="text" name="postal_code" className="form-control bg-light amba-input-field fw-bold text-dark" placeholder="16514" value={formData.postal_code} onChange={handleChange} maxLength={5} required />                      </div>
                     </div>
 
                     <div className="col-12 position-relative">
                       <label className="form-label fw-bold small text-secondary ms-1">Alamat Lengkap</label>
                       <div className="position-relative">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="amba-input-group-icon" style={{top: '26px'}} viewBox="0 0 16 16"><path d="M8 0c-2.21 0-4 1.79-4 4 0 1.2.53 2.27 1.38 3H1c-.55 0-1 .45-1 1s.45 1 1 1h14c.55 0 1-.45 1-1s-.45-1-1-1h-2.38C13.47 6.27 14 5.2 14 4c0-2.21-1.79-4-4-4zm0 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zM1 9h14v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V9z"/></svg>
-                        <textarea name="address" className="form-control bg-light amba-input-field fw-bold text-dark" rows="3" placeholder="Nama Jalan, RT/RW, Kecamatan, Patokan..." value={formData.address} onChange={handleChange} style={{paddingLeft: '48px !important', paddingTop: '16px !important'}}></textarea>
-                      </div>
+<textarea name="address" className="form-control bg-light amba-input-field fw-bold text-dark" rows="3" placeholder="Provinsi, Kecamatan, Nama Jalan, RT/RW, Patokan..." value={formData.address} onChange={handleChange} required style={{paddingLeft: '48px !important', paddingTop: '16px !important'}}></textarea>                      </div>
                     </div>
                   </div>
 

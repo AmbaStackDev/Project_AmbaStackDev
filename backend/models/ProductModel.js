@@ -39,16 +39,26 @@ class ProductModel {
         );
     }
 
+    // FIXED: Memasukkan description dan category_id ke dalam Query UPDATE!
     static update(id, data, callback) {
         const query = `
             UPDATE products 
-            SET name=?, price=?, location=?, stock=?, image=? 
+            SET name=?, price=?, location=?, stock=?, image=?, description=?, category_id=? 
             WHERE id=?
         `;
         db.query(
             query,
             // PASTIKAN URUTAN ARRAY INI SAMA DENGAN TANDA TANYA DI ATAS
-            [data.name, data.price, data.location, data.stock, data.image, id],
+            [
+                data.name, 
+                data.price, 
+                data.location, 
+                data.stock, 
+                data.image, 
+                data.description, 
+                data.category_id, 
+                id
+            ],
             (err, results) => {
                 callback(err, results);
             }

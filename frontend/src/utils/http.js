@@ -1,23 +1,20 @@
 import axios from 'axios';
 
 const http = axios.create({
-  // FIXED: Gunakan relative path agar otomatis ditangani oleh Proxy Vite
-  baseURL: '/api', 
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  // Tetap gunakan IP ini agar terhindar dari bentrok IPv6 (::1)
+  baseURL: 'http://127.0.0.1:8000/api', 
 });
 
-// ✅ Otomatis kirim token di setiap request
+// INTERCEPTOR: Menyisipkan token ke setiap request
 http.interceptors.request.use(
   (config) => {
-    // Ambil token sesi yang disimpan saat login sukses
     const token = localStorage.getItem('token'); 
     
-    if (token) {
-      // Masukkan token ke dalam header Authorization sesuai standar Bearer
+    // FIXED: Cegah pengiriman token fiktif (null/undefined/kosong)
+    if (token && token !== 'null' && token !== 'undefined' && token.trim() !== '') {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    
     return config;
   },
   (error) => {
