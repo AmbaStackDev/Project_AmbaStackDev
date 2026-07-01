@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const http = axios.create({
   // Tetap gunakan IP ini agar terhindar dari bentrok IPv6 (::1)
-  baseURL: 'http://127.0.0.1:8000/api', 
+  baseURL: 'projectambastackdev-production.up.railway.app/api', 
 });
 
 // INTERCEPTOR: Menyisipkan token ke setiap request
